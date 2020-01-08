@@ -1,7 +1,7 @@
 from lexicheck.core import Check, CheckNotEmpty
 
 class CheckNotEmptyLanguages(CheckNotEmpty):
-    """Check for empty column languages.csv"""
+    """Check for empty column in languages.csv"""
     pass
 
 
