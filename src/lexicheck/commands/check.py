@@ -23,8 +23,6 @@ def log(message, status, end=False):
 
 
 def check(dataset, args):
-    print(dataset)
-    print(dir(dataset))
     functions = {
         f[0]: f[1] for f in inspect.getmembers(checkers)
         if inspect.isfunction(f[1])
