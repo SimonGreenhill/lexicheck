@@ -16,23 +16,29 @@ def run(args):
 
 
 def log(message, status, end=False):
-    sys.stdout.write("\r%s %s" % (message.ljust(60), status))
+    sys.stdout.write("\r%s %s" % (message.ljust(70), status))
     if end:
         sys.stdout.write("\n")
     sys.stdout.flush()
 
 
 def check(dataset, args):
-    functions = {
+    checks = {
         f[0]: f[1] for f in inspect.getmembers(checkers)
-        if inspect.isfunction(f[1])
+        if inspect.isclass(f[1])
+        and f[1].__module__.startswith("lexicheck.checkers")
     }
-    for name in sorted(functions):
-        funct = functions[name]
-        message = " - %s" % (funct.__doc__ if funct.__doc__ else name)
+    
+    cldf = dataset.cldf_reader()
+    for name, checker in checks.items():
+        c = checker(dataset, cldf)
+        message = "%s" % (c.__doc__ if c.__doc__ else name)
         log(message, '....')
-        rv = funct(dataset)
+        rv = c.check()
         log(message, rv, True)
+        if not rv:
+            for e in c.errors:
+                print(" - %s" % e)
 
 
 

@@ -1,5 +1,11 @@
+from lexicheck.core import Check
 
-def check_cldf_valid(dataset):
+
+class CheckCLDFValid(Check):
     """Check if CLDF is valid"""
-    cldf = dataset.cldf_reader()
-    return cldf.validate()
+    def check(self):
+        valid = self.cldf.validate()
+        if not valid:
+            self.errors.append('CLDF is invalid!')
+            return not valid
+        return valid
